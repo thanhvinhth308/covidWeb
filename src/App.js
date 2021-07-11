@@ -14,7 +14,6 @@ import Register from './pages/Register';
 function App() {
   return (
     <div className="App">
-      test commit
       {/* <GlobalLoading /> */}
       <Switch>
         <PrivateRouter exact path="/" component={Home} />
