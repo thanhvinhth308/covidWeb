@@ -15,6 +15,7 @@ function App() {
   return (
     <div className="App">
       {/* <GlobalLoading /> */}
+      le thanh vinh
       <Switch>
         <PrivateRouter exact path="/" component={Home} />
         <PrivateRouter exact path="/profile" component={Profile} />
