@@ -25,7 +25,6 @@ function App() {
         <PublicRouter exact path="/register" component={Register} />
         <Route component={MainLayout} />
       </Switch>
-      hahahah
     </div>
   );
 }
