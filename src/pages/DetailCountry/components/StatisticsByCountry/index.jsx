@@ -16,10 +16,10 @@ function StatisticsByCountry(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [time, setTime] = useState(45);
 
-  const handleCountryChange = (e) => {
+  const handleCountryChange = e => {
     setSelectedCountry(e.target.value);
   };
-  const handleTimeChange = (time) => {
+  const handleTimeChange = time => {
     setTime(time);
   };
 
@@ -28,13 +28,13 @@ function StatisticsByCountry(props) {
       const handleCountriesData = async () => {
         setIsLoading(true);
         const respond = await covidApi.getSummaryAllCountry();
-        const countriesData = respond.map((country) => ({
+        const countriesData = respond.map(country => ({
           country: country.country,
           iso2: country.countryInfo.iso2?.toLowerCase(),
-          flag: country.countryInfo?.flag,
+          flag: country.countryInfo?.flag
         }));
         setCountries(countriesData);
-        const country = countriesData.find((item) => item.country == countryName);
+        const country = countriesData.find(item => item.country === countryName);
         setSelectedCountry(country.iso2);
         setIsLoading(false);
       };
@@ -48,16 +48,16 @@ function StatisticsByCountry(props) {
   useEffect(() => {
     if (selectedCountry) {
       setIsLoading(true);
-      const Country = countries.find((country) => country.iso2 === selectedCountry);
+      const Country = countries.find(country => country.iso2 === selectedCountry);
       history.push(`/countries/${Country.country}`);
 
       covidApi
         .getSummaryByCountry(countryName, time)
-        .then((res) => {
+        .then(res => {
           setCountryReport(res);
           setIsLoading(false);
         })
-        .catch((error) => {
+        .catch(error => {
           alert('Get Data failed,please try again');
           setIsLoading(false);
         });
@@ -66,11 +66,7 @@ function StatisticsByCountry(props) {
 
   return (
     <div>
-      <CountrySelector
-        onCountryChange={handleCountryChange}
-        countries={countries}
-        selectedCountry={selectedCountry}
-      />
+      <CountrySelector onCountryChange={handleCountryChange} countries={countries} selectedCountry={selectedCountry} />
       {isLoading && <LinearProgress />}
       <LineChart onTimeChange={handleTimeChange} countryReport={countryReport} />
     </div>

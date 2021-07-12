@@ -26,7 +26,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useSnackbar } from 'notistack';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import Login from '../../components/Login';
 import { checkToken } from '../../utils/localStorage';
 
@@ -73,6 +73,7 @@ function Header(props) {
   const [isMenuOpen, setIsMenuOpen] = useState(null);
   const history = useHistory();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const match = useRouteMatch();
   const { enqueueSnackbar } = useSnackbar();
 
   const classes = useStyles();
@@ -123,7 +124,7 @@ function Header(props) {
       <Divider />
       {checkToken() && (
         <List>
-          <ListItem button key="Home" onClick={navigateHomePage}>
+          <ListItem button key="Home" onClick={navigateHomePage} selected={match.path === '/'}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
@@ -133,23 +134,35 @@ function Header(props) {
       )}
       <Divider />
       <List>
-        <ListItem button key="News" onClick={navigateNewsPage}>
+        <ListItem button key="News" onClick={navigateNewsPage} selected={match.path === '/news'}>
           <ListItemIcon>
             <BurstModeIcon />
           </ListItemIcon>
           <ListItemText primary="News" />
         </ListItem>
       </List>
+      {checkToken() && (
+        <List>
+          <ListItem
+            button
+            key="Statistics by Country"
+            onClick={navigateDetailCountry}
+            selected={match.path === '/countries/:countryName'}
+          >
+            <ListItemIcon>
+              <BurstModeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Statistics by Country" />
+          </ListItem>
+        </List>
+      )}
       <List>
-        <ListItem button key="Statistics by Country" onClick={navigateDetailCountry}>
-          <ListItemIcon>
-            <BurstModeIcon />
-          </ListItemIcon>
-          <ListItemText primary="Statistics by Country" />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key="Register" onClick={navigateRegisterPage}>
+        <ListItem
+          button
+          key="Register"
+          onClick={navigateRegisterPage}
+          selected={match.path === '/register'}
+        >
           <ListItemIcon>
             <AccountBoxIcon />
           </ListItemIcon>
@@ -175,7 +188,7 @@ function Header(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            News
+            Covid Tracking
           </Typography>
           {!checkToken() && (
             <Button color="inherit" onClick={handleModalOpen}>
@@ -249,7 +262,6 @@ function Header(props) {
           <Close></Close>
         </IconButton>
         <DialogContent>
-          {/* {mode === "register" && ( */}
           <>
             <Login closeDialog={handleModalClose} />
           </>

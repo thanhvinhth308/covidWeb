@@ -18,7 +18,7 @@ const generateOptions = data => {
       categories: data.cases && Object.keys(data.cases),
       crosshair: true
     },
-    colors: ['#F3585B', 'yellow', 'black'],
+    colors: ['#c9302c', 'gray', '#28a745'],
     yAxis: {
       min: 0,
       title: {
