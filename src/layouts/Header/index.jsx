@@ -17,7 +17,7 @@ import {
   MenuItem,
   Toolbar,
   Typography,
-  useTheme
+  useTheme,
 } from '@material-ui/core';
 import { AccountCircle, Close } from '@material-ui/icons';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
@@ -30,43 +30,43 @@ import { useHistory } from 'react-router-dom';
 import Login from '../../components/Login';
 import { checkToken } from '../../utils/localStorage';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    display: 'flex'
+    display: 'flex',
   },
   // menuButton: {
   //   marginRight: theme.spacing(2),
   // },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
-      flexShrink: 0
-    }
+      flexShrink: 0,
+    },
   },
   appBar: {
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth
-    }
+      marginLeft: drawerWidth,
+    },
   },
   menuButton: {
     marginRight: theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
-      display: 'none'
-    }
+      display: 'none',
+    },
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    width: drawerWidth
+    width: drawerWidth,
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3)
-  }
+    padding: theme.spacing(3),
+  },
 }));
 const drawerWidth = 240;
 function Header(props) {
@@ -92,7 +92,7 @@ function Header(props) {
   const navigateRegisterPage = () => {
     history.push('/register');
   };
-  const handleMenuOpen = e => {
+  const handleMenuOpen = (e) => {
     setIsMenuOpen(e.currentTarget);
   };
   const handleMenuClose = () => {
@@ -100,6 +100,9 @@ function Header(props) {
   };
   const navigateProfile = () => {
     history.push('/profile');
+  };
+  const navigateDetailCountry = () => {
+    history.push('/countries/Vietnam');
   };
   const handleLogoutClick = () => {
     localStorage.removeItem('username');
@@ -135,6 +138,14 @@ function Header(props) {
             <BurstModeIcon />
           </ListItemIcon>
           <ListItemText primary="News" />
+        </ListItem>
+      </List>
+      <List>
+        <ListItem button key="Statistics by Country" onClick={navigateDetailCountry}>
+          <ListItemIcon>
+            <BurstModeIcon />
+          </ListItemIcon>
+          <ListItemText primary="Statistics by Country" />
         </ListItem>
       </List>
       <List>
@@ -185,11 +196,11 @@ function Header(props) {
         onClose={handleMenuClose}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'right'
+          horizontal: 'right',
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'right'
+          horizontal: 'right',
         }}
         getContentAnchorEl={null}
       >
@@ -206,10 +217,10 @@ function Header(props) {
             open={mobileOpen}
             onClose={handleDrawerToggle}
             classes={{
-              paper: classes.drawerPaper
+              paper: classes.drawerPaper,
             }}
             ModalProps={{
-              keepMounted: true // Better open performance on mobile.
+              keepMounted: true, // Better open performance on mobile.
             }}
           >
             {drawer}
@@ -218,7 +229,7 @@ function Header(props) {
         <Hidden xsDown implementation="css">
           <Drawer
             classes={{
-              paper: classes.drawerPaper
+              paper: classes.drawerPaper,
             }}
             variant="permanent"
             open

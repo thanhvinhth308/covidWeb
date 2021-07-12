@@ -1,21 +1,25 @@
 import { LinearProgress } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import covidApi from '../../apis/covidApi';
-import LineChart from '../Chart/LineChart';
+import { useHistory, useParams } from 'react-router-dom';
+import covidApi from '../../../../apis/covidApi';
+import LineChart from '../../../../components/Chart/LineChart';
 import CountrySelector from './components/CountrySelector';
 StatisticsByCountry.propTypes = {};
 
 function StatisticsByCountry(props) {
+  const history = useHistory();
+  const { countryName } = useParams();
+
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
   const [countryReport, setCountryReport] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [time, setTime] = useState(45);
 
-  const handleCountryChange = e => {
+  const handleCountryChange = (e) => {
     setSelectedCountry(e.target.value);
   };
-  const handleTimeChange = time => {
+  const handleTimeChange = (time) => {
     setTime(time);
   };
 
@@ -24,13 +28,14 @@ function StatisticsByCountry(props) {
       const handleCountriesData = async () => {
         setIsLoading(true);
         const respond = await covidApi.getSummaryAllCountry();
-        const countriesData = respond.map(country => ({
+        const countriesData = respond.map((country) => ({
           country: country.country,
           iso2: country.countryInfo.iso2?.toLowerCase(),
-          flag: country.countryInfo?.flag
+          flag: country.countryInfo?.flag,
         }));
         setCountries(countriesData);
-        setSelectedCountry('vn');
+        const country = countriesData.find((item) => item.country == countryName);
+        setSelectedCountry(country.iso2);
         setIsLoading(false);
       };
       handleCountriesData();
@@ -43,23 +48,29 @@ function StatisticsByCountry(props) {
   useEffect(() => {
     if (selectedCountry) {
       setIsLoading(true);
-      const Country = countries.find(country => country.iso2 === selectedCountry);
+      const Country = countries.find((country) => country.iso2 === selectedCountry);
+      history.push(`/countries/${Country.country}`);
+
       covidApi
-        .getSummaryByCountry(Country.country, time)
-        .then(res => {
+        .getSummaryByCountry(countryName, time)
+        .then((res) => {
           setCountryReport(res);
           setIsLoading(false);
         })
-        .catch(error => {
+        .catch((error) => {
           alert('Get Data failed,please try again');
           setIsLoading(false);
         });
     }
-  }, [countries, selectedCountry, time]);
+  }, [countries, selectedCountry, time, countryName]);
 
   return (
     <div>
-      <CountrySelector onCountryChange={handleCountryChange} countries={countries} selectedCountry={selectedCountry} />
+      <CountrySelector
+        onCountryChange={handleCountryChange}
+        countries={countries}
+        selectedCountry={selectedCountry}
+      />
       {isLoading && <LinearProgress />}
       <LineChart onTimeChange={handleTimeChange} countryReport={countryReport} />
     </div>
