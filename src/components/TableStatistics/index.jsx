@@ -1,36 +1,101 @@
+import { Avatar, Box, makeStyles } from '@material-ui/core';
 import { DataGrid } from '@material-ui/data-grid';
 import React, { useEffect, useState } from 'react';
 import covidApi from '../../apis/covidApi';
 TableStatistics.propTypes = {};
 
+const useStyles = makeStyles({
+  root: {
+    '& .super-app-theme--header': {
+      backgroundColor: 'rgba(255, 7, 0, 0.55)'
+    }
+  }
+});
+
 const columns = [
-  { field: 'id', headerName: 'id', width: 100 },
-  // {
-  //   field: 'flag',
-  //   headerName: 'flag',
-  //   width: 200,
-  //   valueGetter: (params) => `<img src=${params.row.flag} />`,
-  // },
-  { field: 'country', headerName: 'country', width: 200 },
-  { field: 'continent', headerName: 'continent', width: 200 },
-  { field: 'cases', headerName: 'cases', type: 'number', width: 200 },
+  {
+    field: 'id',
+    headerName: 'ID',
+    width: 100,
+    headerAlign: 'center',
+    headerClassName: 'super-app-theme--header',
+    renderCell: params => (
+      <Box textAlign="center" width="100%">
+        {params.row.id}
+      </Box>
+    )
+  },
+
+  {
+    field: 'country',
+    headerName: 'COUNTRY',
+    width: 200,
+    headerAlign: 'center',
+    headerClassName: 'super-app-theme--header',
+    renderCell: params => (
+      <Box display="flex" alignItems="center" textAlign="center">
+        <Avatar src={params.row.flag} />
+        <div>{params.row.country}</div>
+      </Box>
+    )
+  },
+  {
+    field: 'continent',
+    headerName: 'CONTINENT',
+    width: 200,
+    headerAlign: 'center',
+    headerClassName: 'super-app-theme--header',
+    renderCell: params => (
+      <Box textAlign="center" width="100%">
+        {params.row.continent}
+      </Box>
+    )
+  },
+  {
+    field: 'cases',
+    headerName: 'CASES',
+    type: 'number',
+    width: 200,
+    headerAlign: 'center',
+    headerClassName: 'super-app-theme--header',
+    renderCell: params => (
+      <Box textAlign="center" width="100%">
+        {params.row.cases}
+      </Box>
+    )
+  },
   {
     field: 'recovered',
-    headerName: 'recovered',
+    headerName: 'RECOVERED',
+    headerAlign: 'center',
     type: 'number',
-    width: 200
+    width: 200,
+    headerClassName: 'super-app-theme--header',
+    renderCell: params => (
+      <Box textAlign="center" width="100%">
+        {params.row.recovered}
+      </Box>
+    )
   },
   {
     field: 'deaths',
-    headerName: 'deaths',
+    headerName: 'DEATHS',
+    headerAlign: 'center',
     type: 'number',
-    width: 200
+    width: 200,
+    headerClassName: 'super-app-theme--header',
+    renderCell: params => (
+      <Box textAlign="center" width="100%">
+        {params.row.deaths}
+      </Box>
+    )
   }
 ];
 
 function TableStatistics(props) {
   const [infoCountries, setInfoCountries] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const classes = useStyles();
 
   useEffect(() => {
     const handleMapData = async () => {
@@ -38,7 +103,7 @@ function TableStatistics(props) {
       const information = await covidApi.getSummaryAllCountry();
       const informationFilter = information.map((country, index) => ({
         id: index + 1,
-        // flag: country.countryInfo.flag,
+        flag: country.countryInfo.flag,
         country: country?.country,
         continent: country?.continent,
         cases: country?.cases,
@@ -56,7 +121,7 @@ function TableStatistics(props) {
     }
   }, []);
   return (
-    <div style={{ height: 620, width: '100%' }}>
+    <div style={{ height: 620 }} className={classes.root}>
       <DataGrid
         showCellRightBorder={true}
         showColumnRightBorder={true}
@@ -64,6 +129,7 @@ function TableStatistics(props) {
         rows={infoCountries}
         columns={columns}
         pageSize={10}
+        disableExtendRowFullWidth={true}
       />
     </div>
   );

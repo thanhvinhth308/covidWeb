@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box, Paper } from '@material-ui/core';
 import React from 'react';
 import WorldMap from '../../components/Chart/WorldMap';
 import Highlight from '../../components/Highlight';
@@ -9,9 +9,21 @@ function Home(props) {
   return (
     <Box paddingTop="80px">
       <Highlight />
-      <WorldMap />
-      <WorldStatistics />
-      <TableStatistics />
+      <Paper elevation={10}>
+        <Box padding={2} margin={2}>
+          <WorldMap />
+        </Box>
+      </Paper>
+      <Paper elevation={10}>
+        <Box padding={2} margin={2}>
+          <WorldStatistics />
+        </Box>
+      </Paper>
+      <Paper elevation={10}>
+        <Box padding={2} margin={2}>
+          <TableStatistics />
+        </Box>
+      </Paper>
     </Box>
   );
 }
